@@ -1,0 +1,68 @@
+\section{Introduction}
+
+\subsection{General concepts in SPC and ML}
+
+\subsubsection{Statistical Process Control}
+
+Statistical process control (SPC) is a collection of statistical techniques for monitoring process
+stability and improving capability by reducing variability \citep{montgomery_statistical_2012}. Its
+principal tool is the control chart, which plots a monitoring statistic against a control limit;
+a value beyond the limit signals a possible out-of-control (OOC) departure from the in-control (IC)
+state. Charts are judged by their run lengths, usually through the average run length (ARL): a long
+in-control ARL ($\ARL_0$) means few false alarms and a short out-of-control ARL ($\ARL_1$) fast
+detection \citep{ahmed_statistical_2017}. Memoryless Shewhart-type charts suit large shifts, whereas
+memory-type charts such as the cumulative sum (CUSUM) \citep{page_continuous_1954} and the
+exponentially weighted moving average (EWMA) \citep{roberts_control_1959} accumulate evidence and
+suit small, persistent shifts; the multivariate EWMA (MEWMA) \citep{lowry_multivariate_1992} extends
+this to correlated characteristics. These charts assume independent, normally distributed
+observations, and when either assumption fails the realised $\ARL_0$ can differ substantially from
+its nominal value \citep{lowry_multivariate_1992,ahmed_statistical_2017}.
+
+\subsubsection{Machine Learning}
+
+Machine learning (ML) offers data-driven alternatives that need no parametric process model; because
+labelled faults are rare, the relevant methods model normal behaviour only
+\citep{pimentel_review_2014}. An autoencoder (AE) is a neural network trained to reconstruct its input
+through a low-dimensional bottleneck \citep{hinton_reducing_2006}; trained on normal data, its
+reconstruction error measures departure from normal structure. A convolutional autoencoder (CAE) uses
+convolutional layers
+that extract local patterns from inputs such as short multivariate time-series windows
+\citep{lecun_gradient-based_1998,honkela_stacked_2011}. The one-class support vector machine
+(OC-SVM), an unsupervised extension of the support vector machine \citep{cortes_support-vector_1995},
+estimates a region containing most of the normal data and scores new observations relative to its
+boundary \citep{scholkopf_estimating_2001}. On CAE features the two signals are complementary: the
+score asks whether a window's representation looks typical, the reconstruction error whether the
+network can reproduce the window at all.
+
+\subsection{Problem statement and significance of the study}
+
+Nonlinear relationships, serial dependence and non-normality weaken the distributional basis of
+standard control limits \citep{lowry_multivariate_1992,ahmed_statistical_2017}. Learned detectors
+can represent such structure, but they are usually applied observation by observation against a
+fixed threshold, without accumulating evidence or a run-length interpretation of their alarm rate
+\citep{mabu_disaster_2019,biegel_deep_2022,guzman_sidewalk_2026}. This study places CAE
+reconstruction information and OC-SVM anomaly-score information inside a memory-type MEWMA chart
+and evaluates the result as a control chart: its limit is calibrated to a nominal $\ARL_0$ and its
+run lengths are compared with those of a classical MEWMA calibrated to the same target, so any
+benefit of learning is judged on the classical chart's own terms.
+
+\subsection{Research aim and objectives}
+
+The aim is to develop and evaluate a hybrid ML-based MEWMA monitoring scheme that integrates a CAE and
+an OC-SVM for detecting process shifts in multivariate data. The objectives are to:
+\begin{itemize}
+\item construct a CAE and OC-SVM hybrid that combines both signals in one monitoring vector;
+\item investigate its run-length characteristics, with particular interest in small shifts;
+\item evaluate the CAE and OC-SVM components using appropriate diagnostics;
+\item compare the hybrid with a classical MEWMA under a common in-control design target;
+\item examine a range of shift magnitudes and, in a limited analysis, the smoothing constant; and
+\item demonstrate the scheme on simulated multivariate process data.
+\end{itemize}
+
+\subsection{Research outline}
+
+The study is confined to unsupervised monitoring of a simulated nonlinear process, so the true state
+is always known. It covers Phase~I, in which all components and limits are estimated from in-control
+data, and Phase~II, in which the frozen scheme is applied to independent sequences
+\citep{ahmed_statistical_2017}. Sections~2--6 present the literature review, methodology, results,
+practical application and conclusions.

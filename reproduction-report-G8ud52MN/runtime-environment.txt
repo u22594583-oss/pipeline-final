@@ -1,0 +1,83 @@
+Repository: /home/stephen/projects/pipeline-thesis-independent
+UTC start: 2026-09-22T02:06:56Z
+Timing scope: reproduce_all.py from process start through final result writes.
+Environment checks and report collection are excluded from production runtime.
+
+=== Operating system ===
+Linux ASUSF17 6.18.33.2-microsoft-standard-WSL2 #1 SMP PREEMPT_DYNAMIC Thu Jun 18 21:54:43 UTC 2026 x86_64 GNU/Linux
+PRETTY_NAME="Ubuntu 26.04 LTS"
+NAME="Ubuntu"
+VERSION_ID="26.04"
+VERSION="26.04 LTS (Resolute Raccoon)"
+VERSION_CODENAME=resolute
+ID=ubuntu
+ID_LIKE=debian
+HOME_URL="https://www.ubuntu.com/"
+SUPPORT_URL="https://help.ubuntu.com/"
+BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+UBUNTU_CODENAME=resolute
+LOGO=ubuntu-logo
+
+=== CPU ===
+Architecture:                            x86_64
+CPU(s):                                  20
+On-line CPU(s) list:                     0-19
+Model name:                              12th Gen Intel(R) Core(TM) i7-12700H
+Thread(s) per core:                      2
+Core(s) per socket:                      10
+Socket(s):                               1
+
+=== Memory ===
+MemTotal:        7936676 kB
+SwapTotal:       2097152 kB
+
+=== GPU ===
+nvidia-smi unavailable
+Pipeline computation device: CPU
+
+=== Git ===
+Commit: eab995860117efd0aafc6822f2bc3ea046a4a85f
+Working tree:
+ D models/autoencoder.pt
+ D models/control_limits.json
+ D models/mewma.npz
+ D models/ocsvm.npz
+ D models/preprocessing.npz
+ D results/d4_validation_summary.json
+ D results/d5_performance_summary.json
+ D results/run_lengths.npz
+?? reproduce_all.py
+?? reproduce_all.sh
+?? reproduction-report-G8ud52MN/
+
+=== Source hashes ===
+56f28a01e3410ccea7827a6d0ed33b6166b459362bee61d5e7fe9fdd4426a875  pipeline.py
+263ddf105121b68cc209d5bf307ade7fb43588cf904c3fe04dec1e57e5e8f1bb  reproduce_all.py
+63232fd70d065cb1e968bf136bdfe79e8a1e4a25b327ad5ef4be639c580362a8  reproduce_all.sh
+59b9ff84588c6945c1612197ae21c60050f1e8aa41f2e9d3c727a9f24130e51e  requirements.txt
+
+=== Python environment ===
+Python: 3.14.4 (main, Aug 20 2026, 10:41:58) [GCC 15.2.0]
+Executable: /home/stephen/projects/pipeline-thesis-independent/.venv/bin/python
+Platform: Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.43
+numpy: 2.4.6
+torch: 2.13.0
+scikit-learn: 1.9.0
+scipy: 1.18.1
+threadpoolctl: 3.6.0
+DEVICE: cpu
+SEED: 795
+STAGE3_SEED: 3795
+TORCH_THREADS: 1
+NATIVE_THREAD_LIMIT: 1
+
+=== Runtime ===
+Wall seconds: 206.58
+User CPU seconds: 201.17
+System CPU seconds: 4.11
+Peak RSS KiB: 1369596
+Process exit status: 0
+UTC finish: 2026-09-22T02:10:24Z
+Overall exit status: 0
+Outcome: COMPLETE

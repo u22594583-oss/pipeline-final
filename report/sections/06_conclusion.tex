@@ -1,0 +1,36 @@
+\section{Conclusion}
+
+\subsection{Summary}
+
+This study developed a hybrid monitoring scheme in which a CAE supplies a reconstruction error and
+learned features, an OC-SVM scores those features, and a MEWMA chart accumulates the vector
+$(s_t,\ell_t)$. It was implemented on a simulated nonlinear process with five independent datasets,
+and every chart was calibrated empirically to an in-control ARL of 370. The learned components
+behaved largely as intended, and on independent in-control data the hybrid was somewhat more liberal,
+and the classical benchmark somewhat more conservative, than the target. The hybrid had a lower
+$\ARL_1$ than both single-component ablations at every shift (within sampling error only against
+$S(0.05)$ at $\delta\le0.4$), so the combined vector carries more usable information than either
+learned signal alone, but it did not outperform the classical MEWMA: the two were
+indistinguishable at $\delta=0.2$, and the benchmark was faster at every larger shift, by up to 106
+monitoring opportunities on average, with the hybrid needing 1.4 to 2.5 times as many post-change
+observations. Larger smoothing constants shortened the hybrid's run lengths modestly, most in
+relative terms at large shifts, without closing the gap.
+
+\subsection{Recommendations}
+
+First, for sustained mean shifts in a moderately nonlinear process, a well-calibrated classical MEWMA
+on the raw variables should remain the default, and a learned monitor should be adopted only where it
+improves run-length performance against such a benchmark under a common in-control target. Second,
+learned reconstruction and one-class information should be monitored jointly rather than separately,
+since the joint chart dominated both ablations. Third, charts built on overlapping windows should be
+calibrated empirically on the dependent process, with delays reported both in monitoring
+opportunities and in post-change observations.
+
+\subsection{Future work}
+
+The hybrid should be evaluated on faults that alter the shape, variability or dependence of the data
+(variance changes, sensor faults, drifts and transients), for which distance-type features may be
+better suited than for a mean shift, and on larger, more strongly nonlinear processes.
+Direction-preserving learned features, dependence-aware finite-start scaling for overlapping windows,
+changes that occur during monitoring, and validation on the Tennessee Eastman Process and real plant
+data also deserve study.

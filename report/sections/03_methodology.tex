@@ -1,0 +1,124 @@
+\section{Methodology}
+
+\subsection{Simulated process and study design}
+
+A latent state $z_t\in\mathbb{R}^8$ follows a stable mean-adjusted VAR(1), and the four observed
+variables are a nonlinear function of it:
+\begin{equation}
+z_t=\mu_t+\Phi(z_{t-1}-\mu_{t-1})+\eta_t,\quad \eta_t\sim N(0,0.2I_8);\qquad
+x_t=W_2\tanh(z_t)+\varepsilon_t,\quad \varepsilon_t\sim N(0,0.05I_4).
+\label{eq:process}
+\end{equation}
+$\Phi$ is symmetric tridiagonal (diagonal 0.55, adjacent off-diagonals 0.15; spectral radius
+$\approx0.832$), $\tanh$ acts componentwise and $W_2$ is a fixed $4\times8$ mixing matrix
+(Appendix~\ref{app:model}). Each trajectory starts at $z_0=0$ and discards 500 burn-in steps.
+Because the map is nonlinear and $p=4<8$, no linear projection of $x_t$ recovers $z_t$; the latent
+state is never supplied to any model. The fault is a sustained latent mean shift
+$\mu_t=\delta v$ in the fixed direction $v=(1,1,0,\dots,0)\T/\sqrt2$, starting at the first
+retained observation ($\tau=1$), so $\delta$ is the Euclidean size of the shift and every
+out-of-control trajectory is post-change from its first observation. Fifteen magnitudes,
+$\delta=0.2,0.4,\dots,3.0$, are studied; no other fault type is used.
+
+Five datasets generated from independent random streams have separate roles
+(Figure~\ref{fig:pipeline}): D1--D3 fit and calibrate the scheme in Phase~I, after which everything is
+frozen and applied unchanged to D4 (independent in-control validation) and D5 (out-of-control
+evaluation) in Phase~II.
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=\linewidth]{methodology_pipeline_diagram.pdf}
+\caption[Monitoring pipeline and data roles]{Hybrid and benchmark monitoring paths (top) and the
+roles of the five datasets (bottom). Box shading marks the dataset on which a stage is fitted or
+calibrated; every chart first reports at raw time $t=32$ and has $J=2969$ opportunities per
+trajectory.}
+\label{fig:pipeline}
+\end{figure}
+
+\subsection{Learned components}
+
+\textbf{Windows.} D1 is split chronologically into training rows $[0,1600)$ and validation rows
+$[1600,2000)$ before any window is formed. Each variable is standardised with the training-segment
+mean and standard deviation, which are then frozen. Windows $X_t\in\mathbb{R}^{4\times32}$ of the
+$L=32$ most recent standardised observations are formed with stride 1 inside a segment or
+trajectory, so a 3000-observation trajectory yields $J=2969$ windows, the first ending at $t=32$.
+
+\textbf{CAE.} The encoder applies two one-dimensional convolutions ($4\to8\to16$ channels,
+kernel 3, stride 2, ReLU), which halve the window length twice ($32\to16\to8$), and a linear
+bottleneck producing $h_t\in\mathbb{R}^8$; the decoder mirrors this with a linear layer and two
+transposed convolutions (3180 parameters; Appendix~\ref{app:model}). The network was trained on
+the 1569 D1 training windows to minimise the mean squared reconstruction error (Adam, learning rate
+$10^{-3}$, batch size 64, at most 100 epochs, early-stopping patience 10), and the checkpoint with
+the lowest validation loss (epoch 33) was frozen. The reconstruction component is the summed
+squared prediction error of the standardised window and its floored logarithm,
+\begin{equation}
+\SPE_t=\sum_{c=1}^{4}\sum_{k=1}^{32}\big(X_{t,ck}-\hat X_{t,ck}\big)^2,\qquad
+\ell_t=\log\max(\SPE_t,10^{-12}).
+\label{eq:spe}
+\end{equation}
+
+\textbf{OC-SVM.} The 1969 D2 windows are passed through the frozen standardisation and encoder, and
+an RBF OC-SVM is fitted to the resulting features directly, without further scaling:
+\begin{equation}
+k(h,h')=\exp\!\big(-\gamma\lVert h-h'\rVert^2\big),\qquad \nu=0.03,\qquad
+\gamma=\Big[\operatorname*{median}_{i<j}\lVert h_i-h_j\rVert^2\Big]^{-1}\approx0.0305,
+\label{eq:ocsvm}
+\end{equation}
+with the median taken over all $\binom{1969}{2}$ pairs. The parameter $\nu$ bounds the fraction of
+training windows outside the fitted boundary from above and the fraction of support vectors from
+below \citep{scholkopf_estimating_2001}; the fit has 78 support vectors. The monitored score is the
+negated decision function, $s_t=\rho-\sum_j\alpha_j k(h_{(j)},h_t)$, so that a larger $s_t$ means a
+more abnormal window.
+
+\subsection{Monitoring charts and calibration}
+
+The hybrid monitoring vector is $y_t=(s_t,\ell_t)\T$. For a chart input $u_j$ with in-control mean $\hat\mu$ and covariance $\hat\Sigma$, the MEWMA state
+and statistic are \citep{lowry_multivariate_1992}
+\begin{equation}
+Z_j=\lambda u_j+(1-\lambda)Z_{j-1},\;\; Z_0=\hat\mu,\qquad
+T_j^2=(Z_j-\hat\mu)\T(c_j\hat\Sigma)^{-1}(Z_j-\hat\mu),\;\;
+c_j=\tfrac{\lambda}{2-\lambda}\big[1-(1-\lambda)^{2j}\big],
+\label{eq:mewma}
+\end{equation}
+where $j$ indexes monitoring opportunities ($j=1$ at $t=32$) and the exact finite-start factor
+$c_j$ is always used. Six configurations of four charts are evaluated (Table~\ref{tab:ic}). The
+hybrid chart $H$ monitors $y_t$ at the primary $\lambda=0.05$, with $\lambda=0.10$ and $0.20$ as a
+sensitivity analysis; the ablations $S$ and $R$ monitor $s_t$ and $\ell_t$ alone, and the benchmark
+$M$ is a conventional MEWMA on the raw $x_t$, each with $\lambda=0.05$. $\hat\mu$ and
+$\hat\Sigma$ are pooled over all $300\times2969$ D3 monitoring vectors ($S$ and $R$ use the matching
+entries) and, for $M$, over the aligned raw D3 observations at $t=32,\dots,3000$. Because the hybrid
+charts cannot decide before the first window is complete, $M$'s state is updated silently with
+$x_1,\dots,x_{31}$ and it first reports at $t=32$ with factor $c_{32}$, so all six charts share the
+same 2969 opportunities.
+
+Consecutive windows share 31 of their 32 observations, so the monitored sequences are strongly
+autocorrelated (Section~\ref{sec:components}) and $c_j\hat\Sigma$ is only a reference scaling, not
+the covariance of $Z_j$; without independence, limits derived for independent data lose their
+nominal ARL properties \citep{lowry_multivariate_1992}. Each limit is therefore calibrated
+empirically on D3. For a candidate $h$, $\widehat{\ARL}_0(h)$ is the mean over the 300 D3
+trajectories of the first opportunity with $T_j^2>h$, truncated at $J=2969$. As this is a
+non-decreasing step function of $h$, the calibrated limit
+\begin{equation}
+h^*=\min\big\{h\in V:\widehat{\ARL}_0(h)\ge370\big\},
+\label{eq:limit}
+\end{equation}
+where $V$ is the set of values attained by the running maxima of $T_j^2$, is found exactly by
+bisection. The target of 370 is the $\ARL_0$ of a conventional three-sigma Shewhart chart
+\citep{ahmed_statistical_2017}.
+
+\subsection{Evaluation design}
+
+A run length is the first opportunity $j$ with $T_j^2>h^*$; if none occurs by $j=2969$, the run
+length is recorded as 2969 and flagged as censored by a separate indicator, so each mean is a
+restricted ARL. D4 yields each chart's independent in-control run lengths, kept distinct from its D3
+calibration value, and D5 its out-of-control run lengths at the 15 shifts. Because $\tau=1$, the first window is already post-change and a signal at
+opportunity $j$ corresponds to $j+31$ post-change observations: $\ARL_1$ is a detection delay
+measured from the first permitted decision, the setting in which \citet{lowry_multivariate_1992}
+also compared multivariate charts. $H(0.05)$ and $M(0.05)$ monitor the same D5 trajectories, so the
+primary comparison is paired,
+\begin{equation}
+\bar d(\delta)=\frac{1}{500}\sum_{i=1}^{500}\big[\mathrm{RL}_{H,i}(\delta)-\mathrm{RL}_{M,i}(\delta)\big],
+\label{eq:paired}
+\end{equation}
+with standard error $s_d/\sqrt{500}$; a positive $\bar d$ means that the benchmark signalled first.
+The design was fixed in advance: no model, moment, smoothing constant or limit was changed after D4
+or D5 was examined.

@@ -1,0 +1,36 @@
+{
+ "cae_production_log": "best epoch=33, validation loss=0.6622162307827131",
+ "d2_frac_s_positive": 0.029964448958862366,
+ "d2_windows": 1969,
+ "d3_acf1_ell": 0.9590129406995653,
+ "d3_acf1_raw_range": [
+  0.44519588373382873,
+  0.6028535453971533
+ ],
+ "d3_acf1_s": 0.9582999501243139,
+ "d3_acf32_ell": 0.006853410085320424,
+ "d3_acf32_s": 0.026037765722171494,
+ "d3_acf5_raw_max": 0.20523763917844157,
+ "d3_acf_single_rep_p95_abs_lag40to100_ell": 0.1608282121038232,
+ "d3_acf_single_rep_p95_abs_lag40to100_s": 0.15230049959776265,
+ "d3_corr_s_ell": -0.14726578568431306,
+ "d3_exkurt_ell": 0.006296022189738348,
+ "d3_exkurt_s": 0.11991570802216067,
+ "d3_frac_s_positive": 0.06177500842034355,
+ "d3_mean_spe_per_element": 0.6716198720064737,
+ "d3_skew_ell": 0.020881263149698712,
+ "d3_skew_s": 0.5453877676566545,
+ "d3_skew_spe": 0.5282255159472456,
+ "d3_vectors_shape": [
+  300,
+  2969,
+  2
+ ],
+ "d5_std_mean_shift_ell_0.4": 0.10375142323076902,
+ "d5_std_mean_shift_ell_1.0": 0.6381621623212379,
+ "d5_std_mean_shift_ell_3.0": 2.546659405317942,
+ "d5_std_mean_shift_s_0.4": 0.20945875599541366,
+ "d5_std_mean_shift_s_1.0": 0.7469930636716323,
+ "d5_std_mean_shift_s_3.0": 1.8609001353219408,
+ "example_window_spe": 96.6531318444209
+}

@@ -1,0 +1,23 @@
+\section{Application}
+
+The scheme was evaluated only on simulated data; no industrial or benchmark process, such as the
+Tennessee Eastman Process, was monitored in this study. In practice it would be deployed in the same
+two phases. In Phase~I, a stable reference period of normal operation is divided chronologically into
+three parts that mirror D1--D3: standardisation and CAE training, OC-SVM fitting on the frozen
+encoder's features, and estimation of the moments of $y_t$ with empirical calibration of $h^*$ to the
+in-control ARL the plant can tolerate. In Phase~II, each new observation completes a window of the 32
+most recent standardised observations; one CAE pass and one OC-SVM evaluation give $s_t$ and
+$\ell_t$, which update the MEWMA, and a signal prompts investigation rather than automatic correction.
+The computation is light: the CAE has 3180 parameters and the OC-SVM 78 support vectors, and the
+complete production run of this study (data generation, training, calibration and Phase~II
+evaluation of all six charts) took 207 seconds on a single laptop processor thread.
+
+The practical demands are nonetheless real. The reference period must be genuinely in control,
+because faults present in it would be learned as normal. The persistent window features make the
+first reports after a restart conservative: no in-control D4 trajectory of $H(0.05)$ signalled before
+its eleventh report, whereas $M(0.05)$ could signal at its first. Legitimate process changes require
+refitting and recalibration on fresh in-control data, and a signal is harder to trace to individual
+variables than with a raw-data MEWMA, whose state vector indicates the direction of a shift
+\citep{lowry_multivariate_1992}. Above all, the evidence concerns one simulated process and one fault
+family, for which the raw-data benchmark was faster; external validation on the Tennessee Eastman
+Process or real plant data is needed before industrial use can be recommended.

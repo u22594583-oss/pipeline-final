@@ -1,0 +1,16 @@
+This report develops and evaluates a hybrid multivariate monitoring scheme that combines a
+one-dimensional convolutional autoencoder (CAE), a one-class support vector machine (OC-SVM) and
+a multivariate exponentially weighted moving average (MEWMA) control chart. For every window of
+32 observations, the CAE's reconstruction error and the OC-SVM's anomaly score on the CAE
+features form a two-dimensional monitoring vector that the MEWMA accumulates over time. The
+scheme is studied on a simulated nonlinear process driven by a latent vector autoregression,
+using five independent datasets for representation learning, detector fitting, empirical
+calibration of the control limit to an in-control average run length (ARL) of 370, independent
+in-control validation, and out-of-control evaluation under sustained latent mean shifts of
+magnitude 0.2 to 3.0. On independent in-control data the hybrid chart was somewhat more liberal,
+and a classical raw-data MEWMA somewhat more conservative, than the design target. Out of control,
+the hybrid chart had a shorter average run length than both of its single-component ablations at
+every shift, but it did not outperform the classical MEWMA: the two were indistinguishable at the smallest
+shift, and the classical chart detected faster at every shift of 0.4 or more. Post-hoc
+diagnostics attribute this mainly to the weak response of distance-type learned features to a
+directional mean shift, amplified at large shifts by the startup behaviour of the charts.

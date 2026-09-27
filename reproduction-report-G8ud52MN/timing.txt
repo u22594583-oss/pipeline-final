@@ -1,0 +1,5 @@
+Wall seconds: 206.58
+User CPU seconds: 201.17
+System CPU seconds: 4.11
+Peak RSS KiB: 1369596
+Process exit status: 0

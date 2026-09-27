@@ -1,0 +1,128 @@
+[
+  {
+    "achieved_arl0": 371.04,
+    "censor_count": 0,
+    "censor_fraction": 0.0,
+    "chart_id": "H",
+    "components": [
+      0,
+      1
+    ],
+    "dimension": 2,
+    "h_star": 111.08301690320326,
+    "lambda": 0.05,
+    "n_replications": 300,
+    "n_windows": 2969,
+    "role": "primary",
+    "signal_rule": "T2 > h",
+    "source": "hybrid_monitoring_vector",
+    "target_arl0": 370,
+    "truncation_limited": false,
+    "update_index_offset": 0
+  },
+  {
+    "achieved_arl0": 370.54,
+    "censor_count": 0,
+    "censor_fraction": 0.0,
+    "chart_id": "H",
+    "components": [
+      0,
+      1
+    ],
+    "dimension": 2,
+    "h_star": 83.58784283669753,
+    "lambda": 0.1,
+    "n_replications": 300,
+    "n_windows": 2969,
+    "role": "hybrid_sensitivity",
+    "signal_rule": "T2 > h",
+    "source": "hybrid_monitoring_vector",
+    "target_arl0": 370,
+    "truncation_limited": false,
+    "update_index_offset": 0
+  },
+  {
+    "achieved_arl0": 372.43666666666667,
+    "censor_count": 1,
+    "censor_fraction": 0.0033333333333333335,
+    "chart_id": "H",
+    "components": [
+      0,
+      1
+    ],
+    "dimension": 2,
+    "h_star": 51.43064153149941,
+    "lambda": 0.2,
+    "n_replications": 300,
+    "n_windows": 2969,
+    "role": "hybrid_sensitivity",
+    "signal_rule": "T2 > h",
+    "source": "hybrid_monitoring_vector",
+    "target_arl0": 370,
+    "truncation_limited": false,
+    "update_index_offset": 0
+  },
+  {
+    "achieved_arl0": 370.63,
+    "censor_count": 0,
+    "censor_fraction": 0.0,
+    "chart_id": "S",
+    "components": [
+      0
+    ],
+    "dimension": 1,
+    "h_star": 66.045190051217,
+    "lambda": 0.05,
+    "n_replications": 300,
+    "n_windows": 2969,
+    "role": "ablation",
+    "signal_rule": "T2 > h",
+    "source": "hybrid_monitoring_vector",
+    "target_arl0": 370,
+    "truncation_limited": false,
+    "update_index_offset": 0
+  },
+  {
+    "achieved_arl0": 371.34,
+    "censor_count": 0,
+    "censor_fraction": 0.0,
+    "chart_id": "R",
+    "components": [
+      1
+    ],
+    "dimension": 1,
+    "h_star": 71.02839557889465,
+    "lambda": 0.05,
+    "n_replications": 300,
+    "n_windows": 2969,
+    "role": "ablation",
+    "signal_rule": "T2 > h",
+    "source": "hybrid_monitoring_vector",
+    "target_arl0": 370,
+    "truncation_limited": false,
+    "update_index_offset": 0
+  },
+  {
+    "achieved_arl0": 372.4266666666667,
+    "censor_count": 0,
+    "censor_fraction": 0.0,
+    "chart_id": "M",
+    "components": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "dimension": 4,
+    "h_star": 46.5246825248281,
+    "lambda": 0.05,
+    "n_replications": 300,
+    "n_windows": 2969,
+    "role": "benchmark",
+    "signal_rule": "T2 > h",
+    "source": "aligned_raw_observations",
+    "target_arl0": 370,
+    "truncation_limited": false,
+    "update_index_offset": 31
+  }
+]

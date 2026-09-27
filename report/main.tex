@@ -1,0 +1,124 @@
+% Final STK 795 research report.
+% Formatting follows 03_latex_template/legacy_formatting_source.tex (article 10pt, A4,
+% margins 3/2.5/2.5/2.5 cm, double spacing, natbib numbers + apalike). Packages that the
+% legacy file loaded but this report does not use (pstricks family, babel, rotating, ...)
+% are omitted; none of them affects the page layout.
+% Build from report/:  latexmk   (settings in latexmkrc; output in build/)
+\documentclass[english]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[a4paper]{geometry}
+\geometry{verbose,tmargin=3cm,bmargin=2.5cm,lmargin=2.5cm,rmargin=2.5cm}
+\usepackage{url}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{setspace}
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage[hidelinks]{hyperref}
+\doublespacing
+
+\graphicspath{{../figures/}}
+% Generated table rows (tables/*.tex) are read with the primitive \input so they expand
+% inside tabular environments.
+\makeatletter
+\newcommand{\tabinput}[1]{\@@input #1 }
+\makeatother
+% Title-page date in the day-month-year form of the legacy template (compile date).
+\newcommand{\reportdate}{\number\day\ \ifcase\month\or January\or February\or March\or April\or
+  May\or June\or July\or August\or September\or October\or November\or December\fi\
+  \number\year}
+\newcommand{\T}{^{\mathsf T}}
+\newcommand{\ARL}{\mathrm{ARL}}
+\newcommand{\SPE}{\mathrm{SPE}}
+
+\begin{document}
+
+\title{One-class hybrid SVM-CAE based MEWMA monitoring scheme}
+
+\author{Stephen Pienaar (u22594583)\vspace{0.5cm}\\
+STK 795 Research Report\vspace{2cm}\\
+Submitted in partial fulfillment of the degree BCom(Hons) Statistics and Data Science\vspace{0.5cm}\\
+Supervisor(s): Dr. MJC Malela, Co-supervisor(s): Dr. Lyson Chaka \vspace{2cm}\\
+Department of Statistics, University of Pretoria\vspace{0.5cm}\\
+\includegraphics[width=5cm]{UPlogohighres.jpg}\vspace{0.5cm}\\
+\reportdate}
+
+\date{}
+
+\maketitle
+\newpage{}
+\begin{abstract}
+\input{sections/00_abstract.tex}
+\end{abstract}
+
+\newpage{}
+
+\section*{Declaration}
+
+I, \emph{Stephen James Pienaar, }declare that this research report, submitted in
+partial fulfillment of the degree \emph{BCom(Hons) Statistics and Data Science, }at
+the University of Pretoria, is my own work and has not been previously
+submitted at this or any other tertiary institution.
+
+\vspace{1cm}
+
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+\emph{Stephen James Pienaar}
+
+\vspace{1cm}
+
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+\emph{Dr. MJC Malela}
+
+\vspace{1cm}
+
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+\emph{Dr. Lyson Chaka}
+
+\vspace{1cm}
+
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+Date
+
+\newpage{}
+
+\section*{Acknowledgements}
+
+I would like to express my sincere gratitude to my supervisors for their invaluable guidance, support, and encouragement throughout the completion of this thesis. Their expertise and feedback have played an important role in shaping this research. I would also like to thank my family for their continuous support, patience, and encouragement throughout my studies. Their belief in me and constant motivation have been greatly appreciated.
+
+\newpage{}
+
+\tableofcontents{}
+
+\listoffigures
+
+\listoftables
+
+\newpage{}
+
+% ---------------- core report body (exactly 10 pages) ----------------
+\input{sections/01_introduction.tex}
+\input{sections/02_literature_review.tex}
+\input{sections/03_methodology.tex}
+\input{sections/04_results.tex}
+\input{sections/05_application.tex}
+\input{sections/06_conclusion.tex}
+\label{body-end}
+% ---------------- end of core report body ----------------
+
+\newpage
+\phantomsection
+\addcontentsline{toc}{section}{References}
+\bibliographystyle{apalike}
+\bibliography{thesis-lib}
+
+\newpage
+\appendix
+\input{appendix/appendix.tex}
+
+\end{document}

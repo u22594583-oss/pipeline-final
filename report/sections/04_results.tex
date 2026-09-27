@@ -1,0 +1,109 @@
+\section{Results}
+
+Sections~4.1--4.4 report canonical results; Section~4.5 adds post-hoc interpretation.
+
+\subsection{Behaviour of the learned components}
+\label{sec:components}
+
+The CAE generalised to independent in-control data, with a mean squared reconstruction error per
+window element of 0.66 on the D1 validation windows and 0.67 on D3. The OC-SVM met its
+$\nu$-property in sample (3.0\% of D2 windows outside the boundary; 4.0\% support vectors), but
+6.2\% of D3 windows fell outside, so its boundary was somewhat tight out of sample, which the
+D3-calibrated limit absorbs. Figure~\ref{fig:ic} shows that the components were weakly correlated
+($r=-0.15$), that $s_t$ was right-skewed (skewness 0.55) while $\ell_t$ was nearly symmetric, and
+that both were strongly serially dependent: their lag-one autocorrelation of 0.96 decayed almost
+linearly to near zero at lag 32, where windows stop sharing observations, whereas the raw variables'
+lag-one autocorrelations of 0.45--0.60 fell below 0.07 by lag 10. This overlap-induced dependence is
+why the limits were calibrated empirically.
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=\linewidth]{diagnostic_ic_monitoring_vector.pdf}
+\caption[In-control behaviour of the hybrid monitoring vector]{In-control monitoring vectors on
+D3 ($300\times2969$ windows, recomputed from the frozen models; they reproduce the stored D3 moments
+exactly). (a) Joint distribution of $(s_t,\ell_t)$ (grey shading: log count; cross: $\hat\mu$) with
+marginal histograms. (b) Autocorrelation of $s_t$, $\ell_t$ and the four raw variables, pooled over
+trajectories.}
+\label{fig:ic}
+\end{figure}
+
+\subsection{In-control validation}
+
+Table~\ref{tab:ic} sets each chart's D3 calibration value beside its independent D4 performance; no
+D4 run length was censored (one D3 trajectory was censored when calibrating $H(0.20)$). The realised
+$\ARL_0$ departed from 370 in opposite directions: the hybrid configurations ran shorter
+(315.4--336.5, i.e.\ 2.3--4.0 D4 standard errors below target), the ablations stayed close (351.4 and
+363.4) and $M(0.05)$ ran longer (403.5, 1.9 standard errors above); on the same D4 trajectories,
+$M(0.05)$'s run lengths exceeded those of $H(0.05)$ by 67.0 on average (paired SE 22.2). Deviations
+of this size can arise from sampling variability in both the finite calibration bank and D4, but
+their direction matters: $H(0.05)$ was the more liberal chart in control, which, if anything,
+favours it out of control.
+
+\begin{table}[!t]
+\centering
+\caption[Calibrated limits and in-control validation]{Calibrated limit, D3 calibration $\ARL_0$ and
+independent D4 in-control performance (500 trajectories; SE in parentheses) of the six charts.}
+\label{tab:ic}
+\begin{tabular}{llrrrrr}
+\toprule
+Chart & Input & $h^*$ & D3 $\ARL_0$ & D4 $\ARL_0$ (SE) & D4 SDRL & D4 MRL \\
+\midrule
+\tabinput{tables/ic_validation.tex}
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Primary comparison: \texorpdfstring{$H(0.05)$ versus $M(0.05)$}{H(0.05) versus M(0.05)}}
+
+Figure~\ref{fig:ooc}(a)--(b) covers the complete shift grid; no D5 run length was censored. At
+$\delta=0.2$ the charts were indistinguishable ($\ARL_1$ 282.4 and 285.6; $\bar d=-3.2$, paired SE
+15.9). At every $\delta\ge0.4$ the benchmark signalled first on average, by more than ten paired
+standard errors (Appendix~\ref{app:results}). The absolute gap peaked at $\delta=0.4$--$0.6$
+($\bar d\approx98$--106 opportunities) and then narrowed, while the relative gap widened: $M(0.05)$
+signalled at its first opportunity in 41\% of trajectories at $\delta=1.0$ and in essentially all
+from $\delta=2.2$, whereas $H(0.05)$ never did so and levelled off near an $\ARL_1$ of 12.5. Counted
+in post-change observations ($j+31$), the mean delays were 110 against 43 at $\delta=1.0$ and 44
+against 32 at $\delta=3.0$, a ratio of 1.4--2.5 for $\delta\ge0.4$, compared with up to 21 in
+monitoring opportunities. Under this sustained directional mean shift, the classical benchmark
+therefore detected faster at every shift from 0.4 upwards, despite being the more conservative chart
+in control.
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=\linewidth]{results_ooc_arl_panels.pdf}
+\caption[Out-of-control performance across the shift grid]{Out-of-control results on D5 (500
+trajectories per $\delta$; log scale in (a), (c), (d)). (a) $\ARL_1$ of $H(0.05)$ and $M(0.05)$;
+(b) paired mean difference $\bar d(\delta)$ of Equation~(\ref{eq:paired}); (c) $H(0.05)$ and its
+ablations; (d) the three hybrid smoothing constants, with $M(0.05)$ for reference.}
+\label{fig:ooc}
+\end{figure}
+
+\subsection{Ablation and smoothing sensitivity}
+
+Figure~\ref{fig:ooc}(c) shows that $H(0.05)$ had a lower $\ARL_1$ than both ablations at all 15
+shifts. Paired over the same trajectories (Appendix~\ref{app:results}), its advantage over $R(0.05)$
+was clear throughout (8.6--69.0 opportunities, more than three paired SE), whereas that over
+$S(0.05)$ was within sampling error at $\delta\le0.4$ ($-9.7$, SE 14.5; $-6.4$, SE 11.3) and exceeded
+two paired SE from $\delta=0.6$; the score was the stronger single component up to $\delta=1.4$ and
+the reconstruction error beyond it. Figure~\ref{fig:ooc}(d) shows that a larger $\lambda$ changed
+little at small shifts and helped at larger ones, as expected for EWMA-type charts
+\citep{lowry_multivariate_1992}: $H(0.20)$ had the lowest hybrid $\ARL_1$ at every $\delta\ge0.4$, by
+2.6--11.0 opportunities relative to $H(0.05)$. Its D4 $\ARL_0$ was also lower (paired difference
+$-21.1$, SE 11.0), so part of this gain may reflect a more liberal realised calibration, and no
+smoothing constant in the pre-specified range brought the hybrid close to $M(0.05)$.
+
+\subsection{Interpretation}
+
+Two features of the design explain these results. First, the fault is a sustained mean shift in a
+fixed direction, the alternative that a linear, accumulating MEWMA on $x_t$ is built to detect
+\citep{lowry_multivariate_1992}, whereas the hybrid accumulates two distance-type summaries of each
+window, which respond weakly to small location shifts. Second, with $\tau=1$ the benchmark's first
+report already contains 32 accumulated post-change updates, whereas the hybrid's first statistic is
+the Mahalanobis distance of a single window, compared with a limit set by the strongly persistent
+steady state. Post-hoc diagnostics, which are not part of the pre-specified experiment, support both
+explanations: the component means moved by only 0.10--0.21 in-control standard deviations at
+$\delta=0.4$ (Appendix~\ref{app:diagnostics}), and a separate diagnostic audit estimated that $y_t$
+retains 2--36\% of the raw data's mean-shift information per update, that startup mechanics account
+for most of the gap in monitoring opportunities at $\delta\ge1.8$, and that with the change after
+100 in-control reports $H(0.05)$ still needed 2.0--2.5 times as many post-change observations as
+$M(0.05)$ for $\delta\ge0.6$. These diagnostics explain the canonical result; they do not change it.

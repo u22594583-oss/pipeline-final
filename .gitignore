@@ -1,0 +1,56 @@
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Environment/secrets
+git.env
+
+# Claude temporary worktrees
+.claude/worktrees/
+
+# Generated data
+data/generated/*
+data/processed/*
+
+# Model artifacts
+*.pt
+*.pth
+*.joblib
+*.pkl
+
+# Runtime
+logs/
+results/runs/
+results/cache/
+
+# OS/editor
+.DS_Store
+Thumbs.db
+!models/autoencoder.pt
+
+# LaTeX and report-local temporary files
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.lof
+*.log
+*.lot
+*.out
+*.run.xml
+*.synctex.gz
+*.toc
+report/build/*
+!report/build/.gitkeep
+report/scripts/cache/
+!reproduction-report-G8ud52MN/production.log

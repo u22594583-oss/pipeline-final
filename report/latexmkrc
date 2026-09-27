@@ -1,0 +1,8 @@
+# Build the report with `latexmk` from report/: temporary files go to build/,
+# the finished PDF is copied to report/main.pdf.
+@default_files = ('main.tex');
+$pdf_mode = 1;
+$out_dir = 'build';
+$pdflatex = 'pdflatex -interaction=nonstopmode -halt-on-error -file-line-error %O %S';
+ensure_path('BIBINPUTS', '..');   # bibtex runs inside build/; the .bib lives one level up
+$success_cmd = 'cp build/main.pdf main.pdf';
